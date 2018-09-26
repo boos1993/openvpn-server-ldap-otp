@@ -16,6 +16,8 @@ cert $PKI_DIR/issued/${OVPN_SERVER_CN}.crt
 key $PKI_DIR/private/${OVPN_SERVER_CN}.key
 dh $PKI_DIR/dh.pem
 
+client-config-dir /etc/openvpn/clients
+
 Part01
 
 if [ "${OVPN_DNS_SERVERS}x" != "x" ] ; then
@@ -46,13 +48,16 @@ tls-cipher $OVPN_TLS_CIPHERS
 auth SHA512
 cipher AES-256-CBC
 
-comp-lzo
+#comp-lzo
+sndbuf 0
+rcvbuf 0
 
 user nobody
 group nobody
 
 persist-key
 persist-tun
+#ifconfig-pool-persist
 
 status $OPENVPN_DIR/openvpn-status.log
 log-append /var/log/openvpn.log
